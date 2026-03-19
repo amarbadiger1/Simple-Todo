@@ -1,6 +1,7 @@
 import express from "express"
 import dns from "dns";
 import dotenv from "dotenv"
+import cors from "cors"
 import connectDb from "./config/dbConnection.js"
 import authRoutes from "./route/authRoute.js";
 import todoRoutes from "./route/todoRoute.js"
@@ -12,6 +13,7 @@ dotenv.config()
 const port=process.env.PORT
 
 const app = express()
+app.use(cors());
 
 connectDb();
 

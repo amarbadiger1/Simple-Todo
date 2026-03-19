@@ -3,7 +3,6 @@ import Todo from "../model/todoSchema.js"
 export const getTodo = async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log(userId);
         
         if (!userId) {
             return res.status(401).json({
