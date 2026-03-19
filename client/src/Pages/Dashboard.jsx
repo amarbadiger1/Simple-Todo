@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import API from '../services/api';
 import AllTodo from '../components/AllTodo';
 import Navbar from '../components/Navbar';
-
+import { toast } from "react-toastify";
 const Dashboard = () => {
   const [todoData, settodoData] = useState({ title: "", description: "", completed: false })
   const [todo, settodo] = useState([])
@@ -11,13 +11,12 @@ const Dashboard = () => {
     e.preventDefault();
     try {
       const res = await API.post("/todo/add-todo", todoData)
-
-      // refresh UI
       settodoData({ title: "", description: "", completed: false })
       getTodo();
-
+      toast.success(res.data.message);
     } catch (error) {
-      console.log(error);
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg)
     }
   }
 
@@ -27,6 +26,8 @@ const Dashboard = () => {
       settodo(res.data.todos)
     } catch (error) {
       console.log(error);
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg)
     }
   }
 
@@ -96,7 +97,7 @@ const Dashboard = () => {
             <div
               key={e._id}
             >
-              <AllTodo {...e} />
+              <AllTodo {...e} fetchtodo={getTodo} />
             </div>
           ))
         )}

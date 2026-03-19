@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 const Login = () => {
   const [formData, setformData] = useState({ username: "", password: "" })
   const navigate = useNavigate()
@@ -10,8 +11,10 @@ const Login = () => {
       const res = await API.post("/api/login", formData);
       localStorage.setItem("token", res.data.token);
       navigate("/Dashboard")
+      toast.success(res.data.message)
     } catch (error) {
-      console.log(error);
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg)
     }
   }
 
@@ -65,7 +68,7 @@ const Login = () => {
 
         {/* Footer */}
         <p className="text-center text-gray-400 text-sm mt-6">
-          Don’t have an account? <span onClick={()=>navigate("/Register")} className="text-blue-400 cursor-pointer">Register</span>
+          Don’t have an account? <span onClick={() => navigate("/Register")} className="text-blue-400 cursor-pointer">Register</span>
         </p>
 
       </div>

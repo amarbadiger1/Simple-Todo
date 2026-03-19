@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../services/api';
 import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify"
 const Register = () => {
   const [formData, setformData] = useState({ username: "", password: "" })
   const navigate = useNavigate();
@@ -9,12 +10,11 @@ const Register = () => {
     try {
       const res = await API.post("/api/register", formData)
       console.log(res.data.message);
-
-      // optional: redirect after register
-      window.location.href = "/login";
-
+      navigate("/")
+      toast.success(res.data.message)
     } catch (error) {
-      console.log(error);
+      const msg = error.response?.data?.message || "Something went wrong";
+        toast.error(msg)
     }
   }
 

@@ -4,6 +4,8 @@ import Register from "./Pages/Register"
 import Login from './Pages/Login'
 import Dashboard from './Pages/Dashboard'
 import ProtectedRoute from "./components/ProtectedRoute"
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
     <BrowserRouter>
@@ -16,6 +18,7 @@ const App = () => {
           </ProtectedRoute>
         } />
       </Routes>
+      <ToastContainer/>
     </BrowserRouter>
   )
 }
