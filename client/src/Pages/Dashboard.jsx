@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const Dashboard = () => {
   const [todoData, settodoData] = useState({ title: "", description: "", completed: false })
   const [todo, settodo] = useState([])
-
+  const [search, setSearch] = useState("");
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -35,10 +35,13 @@ const Dashboard = () => {
     getTodo()
   }, [])
 
+
+  const filteredSearch = todo.filter((e) => e.title.toLowerCase().includes(search.toLocaleLowerCase()) ||
+    e.description.toLowerCase().includes(search.toLocaleLowerCase())
+  )
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white p-6">
-
-
       <Navbar />
       {/* Form Card */}
       <div className="max-w-xl mx-auto bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
@@ -87,13 +90,25 @@ const Dashboard = () => {
         </form>
       </div>
 
-      {/* Todo List */}
-      <div className="mt-10 max-w-xl mx-auto grid gap-4">
+      <div className='flex gap-3 max-w-xl mx-auto mt-3'>
+        <input
+          type="text"
+          placeholder="Search"
+          className="px-4 py-2 w-full rounded-lg bg-white/20 placeholder-gray-300 outline-none focus:ring-2 focus:ring-blue-400"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        />
+      </div>
 
-        {todo.length === 0 ? (
+      {/* Todo List */}
+      <div className="mt-3 max-w-xl mx-auto grid gap-4">
+
+        {filteredSearch.length === 0 ? (
           <p className="text-center text-gray-400">No todos yet</p>
         ) : (
-          todo.map((e) => (
+          filteredSearch.map((e) => (
             <div
               key={e._id}
             >
