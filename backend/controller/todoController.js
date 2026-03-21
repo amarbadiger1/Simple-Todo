@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import Todo from "../model/todoSchema.js"
 
 export const getTodo = async (req, res) => {
     try {
         const userId = req.user.id;
-        
+
         if (!userId) {
             return res.status(401).json({
                 message: "User not authenticated"
@@ -29,6 +30,50 @@ export const getTodo = async (req, res) => {
     }
 
 }
+
+
+
+export const getSingleTodo = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user.id;
+
+        // Validate ID
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message: "Invalid Todo ID"
+            });
+        }
+
+        if (!id) {
+            return res.status(404).json({
+                message: "Id not Found"
+            })
+        }
+
+        const todo = await Todo.findOne({
+            _id: id,
+            user: userId
+        })
+
+        if (!todo) {
+            return res.status(404).json({
+                message: "Todo Not Found"
+            })
+        }
+
+        return res.status(200).json({ todo })
+
+    } catch (error) {
+        console.log(error)
+
+        return res.status(500).json({
+            message: "Server error"
+        })
+    }
+
+}
+
 
 
 export const addTodo = async (req, res) => {

@@ -1,11 +1,14 @@
 import API from "../services/api"
 import { toast } from "react-toastify"
 import { FaTrash } from "react-icons/fa";
+import { IoIosCheckboxOutline } from "react-icons/io";
+import { IoIosCheckbox } from "react-icons/io";
+import { RiFileEditFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const AllTodo = ({ _id, title, description, completed, fetchtodo }) => {
-  // const [updateTodo, setupdateTodo] = useState({})
+  const navigate = useNavigate()
   const handleToggle = async () => {
-
     try {
       const id = _id;
       const res = await API.patch(`todo/update-todo/${id}`, { completed: !completed })
@@ -32,6 +35,9 @@ const AllTodo = ({ _id, title, description, completed, fetchtodo }) => {
     }
   }
 
+  const handleEdit = () => {
+    navigate(`/edit/${_id}`)
+  }
 
   return (
     <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl shadow-md flex justify-between items-center">
@@ -41,13 +47,13 @@ const AllTodo = ({ _id, title, description, completed, fetchtodo }) => {
         <p className="text-gray-300">{description}</p>
       </div>
       <div className="flex gap-2">
-        <button
+        <button className="text-2xl"
           onClick={handleToggle}
-          className={`px-4 py-1 rounded-lg text-sm font-semibold transition border-red-100 border-2`}
         >
-          {completed ? "Done" : "Mark Done"}
+          {completed ? <IoIosCheckbox /> : <IoIosCheckboxOutline />}
         </button>
-        <button onClick={handleDelete} className="p-2 rounded bg-gray-600"><FaTrash /></button>
+        <button className="text-xl" onClick={handleEdit}><RiFileEditFill /></button>
+        <button onClick={handleDelete} className="text-x"><FaTrash /></button>
       </div>
     </div>
   )

@@ -1,11 +1,13 @@
 import express from "express"
 import jwtVerification from "../auth/jwtVerification.js"
-import { getTodo,addTodo,deleteTodo,updateTodo } from "../controller/todoController.js";
+import { getTodo,addTodo,deleteTodo,updateTodo,getSingleTodo } from "../controller/todoController.js";
 const router=express.Router()
 
 
 
 router.get("/get-todo",jwtVerification,getTodo);
+
+router.get("/get-singleTodo/:id",jwtVerification,getSingleTodo);
 
 router.post("/add-todo",jwtVerification,addTodo);
 
