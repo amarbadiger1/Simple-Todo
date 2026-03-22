@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import API from '../services/api';
 import { useNavigate } from "react-router-dom";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 const Register = () => {
   const [formData, setformData] = useState({ username: "", password: "" })
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await API.post("/api/register", formData)
       console.log(res.data.message);
@@ -14,9 +18,12 @@ const Register = () => {
       toast.success(res.data.message)
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
-        toast.error(msg)
+      toast.error(msg)
+    } finally {
+      setLoading(false);
     }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-blue-900">
@@ -59,9 +66,14 @@ const Register = () => {
 
           {/* Button */}
           <button
-            className="w-full py-2 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg"
+            disabled={loading}
+            className="w-full h-10 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg flex items-center justify-center"
           >
-            Register
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Register"
+            )}
           </button>
 
         </form>
@@ -70,7 +82,7 @@ const Register = () => {
         <p className="text-center text-gray-400 text-sm mt-6">
           Already have an account?{" "}
           <span
-            onClick={()=>navigate("/")}
+            onClick={() => navigate("/")}
             className="text-blue-400 cursor-pointer hover:underline"
           >
             Login

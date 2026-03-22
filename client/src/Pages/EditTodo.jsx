@@ -13,15 +13,18 @@ const EditTodo = () => {
     title: "",
     description: ""
   });
-
+  const [loading, setloading] = useState(false)
 
   const getSignleTodo = async () => {
+    setloading(true)
     try {
       const res = await API.get(`/todo/get-singleTodo/${id}`)
       setTodo(res.data.todo);
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg)
+    }finally{
+      setloading(false)
     }
   }
 
@@ -33,6 +36,7 @@ const EditTodo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setloading(true)
     try {
       const res = await API.patch(`todo/update-todo/${id}`, todo)
       nagivate("/dashboard")
@@ -41,6 +45,8 @@ const EditTodo = () => {
       console.log(error);
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg)
+    }finally{
+      setloading(false)
     }
   };
 
@@ -96,10 +102,14 @@ const EditTodo = () => {
           />
 
           <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 py-2 rounded-lg font-semibold transition"
+            disabled={loading}
+            className="w-full h-10 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg flex items-center justify-center"
           >
-            Update
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Update"
+            )}
           </button>
 
         </form>

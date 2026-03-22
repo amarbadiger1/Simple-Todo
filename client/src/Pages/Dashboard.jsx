@@ -7,8 +7,11 @@ const Dashboard = () => {
   const [todoData, settodoData] = useState({ title: "", description: "", completed: false })
   const [todo, settodo] = useState([])
   const [search, setSearch] = useState("");
+  const [loading, setloading] = useState(false)
+
   async function handleSubmit(e) {
     e.preventDefault();
+    setloading(true)
     try {
       const res = await API.post("/todo/add-todo", todoData)
       settodoData({ title: "", description: "", completed: false })
@@ -17,6 +20,8 @@ const Dashboard = () => {
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg)
+    } finally {
+      setloading(false)
     }
   }
 
@@ -83,8 +88,15 @@ const Dashboard = () => {
           </label>
 
           {/* Button */}
-          <button className="bg-blue-500 hover:bg-blue-600 py-2 rounded-lg font-semibold transition">
-            Add Todo
+          <button
+            disabled={loading}
+            className="w-full h-10 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg flex items-center justify-center"
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Add Todo"
+            )}
           </button>
 
         </form>

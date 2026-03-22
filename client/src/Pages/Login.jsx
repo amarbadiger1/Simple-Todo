@@ -4,10 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 const Login = () => {
   const [formData, setformData] = useState({ username: "", password: "" })
+  const [loading, setloading] = useState(false)
   const navigate = useNavigate()
+
+
   async function handleSubmit(e) {
+    e.preventDefault();
+    setloading(true);
     try {
-      e.preventDefault();
+
       const res = await API.post("/api/login", formData);
       localStorage.setItem("token", res.data.token);
       navigate("/Dashboard")
@@ -15,6 +20,8 @@ const Login = () => {
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg)
+    } finally {
+      setloading(false)
     }
   }
 
@@ -59,9 +66,14 @@ const Login = () => {
 
           {/* Button */}
           <button
-            className="w-full py-2 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg"
+            disabled={loading}
+            className="w-full h-10 mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-300 shadow-lg flex items-center justify-center"
           >
-            Login
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Login"
+            )}
           </button>
 
         </form>
