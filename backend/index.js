@@ -13,9 +13,7 @@ dotenv.config()
 const port=process.env.PORT
 
 const app = express()
-app.use(cors({
-  origin: "https://simple-todo-fawn.vercel.app/",
-}));
+app.use(cors());
 
 connectDb();
 
