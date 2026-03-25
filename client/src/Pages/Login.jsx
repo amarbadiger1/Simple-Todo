@@ -38,10 +38,10 @@ const Login = () => {
 
           {/* Username */}
           <div>
-            <label className="text-sm text-gray-300">Username</label>
+            <label className="text-sm text-gray-300">Email</label>
             <input
               type="text"
-              placeholder="Enter your username"
+              placeholder="Enter your Email"
               value={formData.username}
               onChange={(e) =>
                 setformData({ ...formData, username: e.target.value })
