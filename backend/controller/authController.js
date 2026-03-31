@@ -6,7 +6,7 @@ import bcrypt from "bcrypt"
 
 const userZodSchema = z.object({
     username: z.email(),
-    password: z.string().min(6).max(8)
+    password: z.string().min(6)
 })
 
 
